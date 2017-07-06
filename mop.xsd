@@ -89,15 +89,15 @@
             </xsd:documentation>
           </xsd:annotation>
         </xsd:attribute>
-        
+
         <xsd:attribute name="date" type="xsd:date" use="optional">
-          <xsd:annotation>                      
+          <xsd:annotation>
             <xsd:documentation>
               The date of the event, expressed in ISO 8601 format.
             </xsd:documentation>
           </xsd:annotation>
         </xsd:attribute>
-        
+
       </xsd:extension>
     </xsd:simpleContent>
   </xsd:complexType>
@@ -137,20 +137,20 @@
             </xsd:documentation>
           </xsd:annotation>
         </xsd:attribute>
-        
+
         <xsd:attribute name="radio" type="xsd:string" use="optional">
           <xsd:annotation>
             <xsd:documentation>
-              Ordered radio control id:s for each leg in the class. 
-              The legs are separated with semicolon (;) and the 
+              Ordered radio control id:s for each leg in the class.
+              The legs are separated with semicolon (;) and the
               radio control id:s of a leg are separated by comma (,).
-              Examples: Single leg, two radio controls "67,150". 
+              Examples: Single leg, two radio controls "67,150".
                         Two legs, one radio on each leg (same radio) "67;67".
                         Two legs, two radios on each leg "67,150;77;150".
             </xsd:documentation>
           </xsd:annotation>
         </xsd:attribute>
-        
+
         <xsd:attribute name="ord" type="xsd:integer" use="optional">
           <xsd:annotation>
             <xsd:documentation>
@@ -158,7 +158,7 @@
             </xsd:documentation>
           </xsd:annotation>
         </xsd:attribute>
-        
+
       </xsd:extension>
     </xsd:simpleContent>
   </xsd:complexType>
@@ -199,7 +199,7 @@
             </xsd:documentation>
           </xsd:annotation>
         </xsd:attribute>
-        
+
         <xsd:attribute name="st" type="xsd:integer" use="optional">
           <xsd:annotation>
             <xsd:documentation>
@@ -215,7 +215,7 @@
             </xsd:documentation>
           </xsd:annotation>
         </xsd:attribute>
-                
+
         <xsd:attribute name="cls" type="xsd:integer" use="required">
           <xsd:annotation>
             <xsd:documentation>
@@ -223,7 +223,7 @@
             </xsd:documentation>
           </xsd:annotation>
         </xsd:attribute>
-                
+
         <xsd:attribute name="org" type="xsd:integer" use="optional">
           <xsd:annotation>
             <xsd:documentation>
@@ -231,7 +231,7 @@
             </xsd:documentation>
           </xsd:annotation>
         </xsd:attribute>
-        
+
       </xsd:extension>
     </xsd:simpleContent>
   </xsd:complexType>
@@ -241,8 +241,8 @@
       <xsd:documentation>
         Input status.
       </xsd:documentation>
-    </xsd:annotation>    
-    
+    </xsd:annotation>
+
     <xsd:attribute name="it" type="xsd:integer" use="required">
       <xsd:annotation>
         <xsd:documentation>
@@ -250,16 +250,16 @@
         </xsd:documentation>
       </xsd:annotation>
     </xsd:attribute>
-    
+
     <xsd:attribute name="tstat" type="xsd:integer" use="required">
       <xsd:annotation>
         <xsd:documentation>
           Total status of the competitor after this race/leg/stage etc.
         </xsd:documentation>
       </xsd:annotation>
-    </xsd:attribute>    
+    </xsd:attribute>
   </xsd:complexType>
-  
+
   <xsd:complexType name="Competitor">
     <xsd:annotation>
       <xsd:documentation>
@@ -293,7 +293,7 @@
           <xsd:documentation>
             Id:s of competitors running in this team. Each leg is separated by a semicolon (;)
             and if several competitors run the same leg (in parallel or as a patrol), the id:s
-            within a leg is separated by comma (,). 
+            within a leg is separated by comma (,).
             Examples: Three legs, one runner on each leg: "31;32;33".
                       A patrol of two: "31,32".
                       Three legs, three parallel runners on the middle leg: "31;32,33,34;35".
@@ -309,5 +309,5 @@
       </xsd:annotation>
     </xsd:attribute>
   </xsd:complexType>
-  
+
 </xsd:schema>
