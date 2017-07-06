@@ -34,10 +34,6 @@
 <head>
 <meta charset="UTF-8" />
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Silverleden Online Results</title>
-
 <style type="text/css">
 body {
   font-family: verdana, arial, sans-serif;
@@ -59,15 +55,9 @@ h1 {text-shadow: 3px 3px 3px #AAAAAA;}
 th {text-align:left;}
 td {padding-right:1em;}
 </style>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
 </head>
 <body>
-<div class="container">
+
 <?php
   if ($_GET['select'] == 1 || $cmpId == 0) {
     print "<h1>$lang[selectcmp]</h1>";
@@ -86,29 +76,27 @@ td {padding-right:1em;}
   if ($r = $res->fetch_array()) {
     print "<h1>$r[name] &ndash; $r[date]</h1>\n";
 
-    /*if (strlen($r['organizer']) > 0) {
+    if (strlen($r['organizer']) > 0) {
       if (strlen($r['homepage'])>0)
         print '<a href="'.$r['homepage'].'">'.$r['organizer'].'</a><br>';
       else
-        print $r['organizer'].'<br>';
-    }*/
+        print $r['organizer'].'<br>';      
+    }     
   }
 
-  //print '<br><div style="clear:both;"><a href="'.$PHP_SELF.'?select=1" class="button">'.$lang['selectcmp'].'</a></div>';
+  print '<br><div style="clear:both;"><a href="'.$PHP_SELF.'?select=1" class="button">'.$lang['selectcmp'].'</a></div>';
 
-  print '<ul class="nav nav-pills">';
+  print '<div style="float:left;margin:2em;">';  
   $sql = "SELECT name, id FROM mopClass WHERE cid = '$cmpId' ORDER BY ord";
   $res = $link->query($sql);
-  if (isset($_GET['cls'])) $cls = (int)$_GET['cls'];
+  
 
   while ($r = $res->fetch_array()) {
-    print '<li role="presentation" ';
-    if($r[id] == $cls) print ' class="active"';
-    print '><a href="'."$PHP_SELF?cls=$r[id]".'">'.$r['name']."</a></li>\n";
+    print '<a href="'."$PHP_SELF?cls=$r[id]".'">'.$r['name']."</a><br/>\n";
   }
 
-  print '</ul>';
-
+  print '</div><div style="float:left;">';
+  
   if (isset($_GET['cls'])) {
     $cls = (int)$_GET['cls'];
     $sql = "SELECT name FROM mopClass WHERE cid='$cmpId' AND id='$cls'";
@@ -190,19 +178,11 @@ td {padding-right:1em;}
         $radio = selectRadio($cls);
         if ($radio!='') {
           if ($radio == 'finish') {
-            /*$sql = "SELECT cmp.id AS id, cmp.name AS name, org.name AS team, cmp.rt AS time, cmp.stat AS status ".
+            $sql = "SELECT cmp.id AS id, cmp.name AS name, org.name AS team, cmp.rt AS time, cmp.stat AS status ".
                    "FROM mopCompetitor cmp LEFT JOIN mopOrganization AS org ON cmp.org = org.id AND cmp.cid = org.cid ".
                    "WHERE cmp.cls = '$cls' ".
-                   "AND cmp.cid = '$cmpId' AND cmp.stat>0 ORDER BY cmp.stat, cmp.rt ASC, cmp.id";*/
-            $rname = "Totalställning";
-            $sql = " SELECT cmp.id AS id, cmp.name AS name, org.name AS team, IF(cmp.rt>0, cmp.rt, mopRadioMax.rt) AS time, IF(cmp.rt>0, '".$lang['finish']."', mopControl.name) AS ctrlName, IF(cmp.rt>0, 999, cc.ord) AS sortOrd, cmp.stat AS status ".
-             "FROM mopCompetitor cmp LEFT JOIN mopOrganization AS org ON cmp.org = org.id AND cmp.cid = org.cid ".
-             "INNER JOIN (SELECT id, MAX(rt) as rt FROM mopRadio WHERE cid=1 GROUP BY id) mopRadioMax ON cmp.id=mopRadioMax.id ".
-             "INNER JOIN mopRadio ON cmp.id = mopRadio.id AND mopRadio.rt = mopRadioMax.rt AND mopRadio.cid=cmp.cid ".
-             "INNER JOIN mopControl ON mopRadio.ctrl = mopControl.id AND mopControl.cid=cmp.cid ".
-             "LEFT JOIN mopClassControl cc ON cc.cid=cmp.cid AND cc.id=cmp.cls AND mopRadio.ctrl=cc.ctrl ".
-             "WHERE cmp.cid='$cmpId' AND cmp.cls = '$cls' ".
-             "ORDER BY sortOrd DESC, time";
+                   "AND cmp.cid = '$cmpId' AND cmp.stat>0 ORDER BY cmp.stat, cmp.rt ASC, cmp.id";
+            $rname = $lang["finish"];
           }
           else {
             $rid = (int)$radio;
@@ -216,7 +196,7 @@ td {padding-right:1em;}
                    "LEFT JOIN mopOrganization AS org ON cmp.org = org.id AND cmp.cid = org.cid ".
                    "WHERE radio.ctrl='$rid' ".
                    "AND radio.id=cmp.id ".
-                   //"AND cmp.stat<=1 ".
+                   "AND cmp.stat<=1 ".
                    "AND cmp.cls='$cls' ".
                    "AND cmp.cid = '$cmpId' AND radio.cid = '$cmpId' ".
                    "ORDER BY radio.rt ASC ";
@@ -265,13 +245,11 @@ td {padding-right:1em;}
          formatResult($results);
         }
       }
-    }
-  }elseif (isset($_GET["runnerId"])) {
-    include("showRunner.php");
+    }   
   }
-?>
+  print '</div>';
+?> 
+<div style="clear:both;padding-top:3em;color: grey;">
+ Results provided by <a href="http://www.melin.nu/meos" target="_blank">MeOS Online Results</a>.
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </body></html>

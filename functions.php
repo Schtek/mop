@@ -29,7 +29,7 @@ function query($sql) {
   global $link;
   $result = $link->query($sql);
   if (!$result) {
-   die('Invalid query: ' . mysql_error());
+   die('Invalid query: ' . $link->error);
   }
   return $result;
 }
@@ -63,7 +63,6 @@ function calculateResult($res) {
   $lastTime = -1;
   $bestTime = -1;
   $lastTeam = -1;
-  $lastCtrl = -1;
   $totalResult = array();
   $hasTotal = false;
   while ($r = $res->fetch_array()) {
@@ -75,10 +74,6 @@ function calculateResult($res) {
       $lastTeam = $r['id'];
     $count++;
     $t = $r['time']/10;
-    if(isset($r['sortOrd']) && $lastCtrl != $r['sortOrd']){
-      $bestTime = -1;
-      $lastCtrl = $r['sortOrd'];
-    }
     if ($bestTime == -1)
       $bestTime = $t;
     if ($lastTime != $t) {
@@ -86,15 +81,12 @@ function calculateResult($res) {
       $lastTime = $t;
     }
     $row = array();
-
-    //$row['new'] = time() - strtotime('6:00:00') - $t < 5*60;
-$row['new'] = false;
-    if ($r['status'] == 1 || $r['status'] == 0 || $r['status'] == 3 || $r['status'] == 4) {
+    
+    if ($r['status'] == 1) {
       $row['place'] = $place.".";
       $row['name'] = $r['name'];
       $row['team'] = $r['team'];
-      $row['id'] = $r['id'];
-
+    
       if ($t > 0)
         $row['time'] = sprintf("%d:%02d:%02d", $t/3600, ($t/60)%60, $t%60);
       else
@@ -112,9 +104,8 @@ $row['new'] = false;
       $row['place'] = "";
       $row['name'] = $r['name'];
       $row['team'] = $r['team'];
-      $row['id'] = $r['id'];
 
-      //$row['time'] = getStatusString($r['status']);
+      $row['time'] = getStatusString($r['status']);
       $row['after'] = "";
     }
 
@@ -137,9 +128,7 @@ $row['new'] = false;
       else
         $totalResult[$count] = 10000000 * 100;
     }
-    if(isset($r['ctrlName']))
-      $row['ctrl'] = $r['ctrlName'];
-
+          
     $out[$count] = $row;
   }
 
@@ -185,28 +174,23 @@ $row['new'] = false;
 function formatResult($result) {
   global $lang;
   $head = false;
-  print '<div class="table-responsive"><table class="table table-striped"><thead>';
-  foreach($result as $row) {
+  print "<table>";
+  foreach($result as $row) {            
     if ($head == false) {
       print "<tr>";
       foreach($row as $key => $cell) {
-        if($key != 'id' && $key != 'new')
-          print "<th>".$lang[$key]."</th>\n";
+        print "<th>".$lang[$key]."</th>\n";  
       }
-      print "</tr></thead>";
-      $head = true;
-    }
-    if($row['new']) print '<tr class="info">';
-    else print "<tr>";
-    foreach($row as $key => $cell) {
-      if($key == 'name')
-        print '<td><a href="show.php?runnerId='.$row['id'].'">'.$cell.'</a></td>';
-      elseif($key != 'id' && $key != 'new')
-        print "<td>$cell</td>";
+      print "</tr>";
+      $head = true; 
+    }      
+    print "<tr>";
+    foreach($row as $cell) {
+      print "<td>$cell</td>";  
     }
     print "</tr>";
   }
-  print "</table></div>";
+  print "</table>";
 }
 
 function selectRadio($cls) {
@@ -225,12 +209,11 @@ function selectRadio($cls) {
     if (isset($_GET['radio'])) {
       $radio = $_GET['radio'];
     }
-    print '<div class="btn-group" role="group" aria-label="...">';
+
     while ($r = $res->fetch_array()) {
-      print '<a href="'."$PHP_SELF?cls=$cls&radio=$r[ctrl]".'" class="btn btn-default">'.$r['name']."</a>\n";
+      print '<a href="'."$PHP_SELF?cls=$cls&radio=$r[ctrl]".'">'.$r['name']."</a><br/>\n";      
     }
-    print '<a href="'."$PHP_SELF?cls=$cls&radio=finish".'" class="btn btn-default">'.'Totalställning'."</a>\n";
-    print '</div>';
+    print '<a href="'."$PHP_SELF?cls=$cls&radio=finish".'">'.'Finish'."</a><br/>\n";      
   }
   else {
     // Only finish
@@ -370,10 +353,9 @@ function processCompetitor($cid, $cmp) {
   $stat = (int)$base['stat'];
   $st = (int)$base['st'];
   $rt = (int)$base['rt'];
-  $bib = (int)$base['bib'];
-
-
-  $sqlupdate = "name='$name', org=$org, cls=$cls, stat=$stat, st=$st, rt=$rt, bib=$bib";
+  
+  
+  $sqlupdate = "name='$name', org=$org, cls=$cls, stat=$stat, st=$st, rt=$rt";
 
   if (isset($cmp->input)) {
     $input = $cmp->input;

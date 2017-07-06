@@ -30,7 +30,6 @@ function setupBaseCompetitor() {
          " stat TINYINT NOT NULL DEFAULT 0,".
          " st INT NOT NULL DEFAULT 0,".
          " rt INT NOT NULL DEFAULT 0,".
-         " bib INT NOT NULL DEFAULT 0,".
          " INDEX(org), INDEX(cls),  INDEX(stat, rt), INDEX(st)";
 }
 

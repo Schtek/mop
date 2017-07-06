@@ -1,24 +1,23 @@
 <?php
 
 // MySQL server configuration
-define("MYSQL_HOSTNAME", "localhost");
+define("MYSQL_HOSTNAME", "");
 define("MYSQL_USERNAME", "");
 define("MYSQL_DBNAME", "");
 define("MYSQL_PASSWORD", "");
 
-define("MEOS_PASSWORD", "");
+define("MEOS_PASSWORD", "meos");
 
   //Localization. NOTE: UTF-8 encoding required for non-latin characters
   $lang = array();
-  $lang['selectcmp'] = "Välj tävling";
-  $lang['place'] = "Pl.";
+  $lang['selectcmp'] = "Select Competition";
+  $lang['place'] = "Place";
   $lang['team'] = "Team";
-  $lang['name'] = "Namn";
+  $lang['name'] = "Name";
   $lang['after'] = "&nbsp;";
-  $lang['time'] = "Tid";
-  $lang['finish'] = "Mål";
-  $lang['tottime'] = "Total tid";
+  $lang['time'] = "Time";
+  $lang['finish'] = "Finish";
+  $lang['tottime'] = "Total Time";
   $lang['totafter'] = "&nbsp;";
-  $lang['ctrl'] = "Kontroll"
 
 ?>
